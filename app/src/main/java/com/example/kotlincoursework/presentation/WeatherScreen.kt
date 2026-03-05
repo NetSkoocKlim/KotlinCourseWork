@@ -16,7 +16,12 @@ fun WeatherScreen(viewModel: WeatherViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(
+                top=40.dp,
+                start=16.dp,
+                end=16.dp,
+                bottom=40.dp
+            ),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         TextField(
