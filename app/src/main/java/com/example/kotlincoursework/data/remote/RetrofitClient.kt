@@ -1,5 +1,7 @@
 package com.example.kotlincoursework.data.remote
 
+import com.example.kotlincoursework.data.remote.api.CityApiService
+import com.example.kotlincoursework.data.remote.api.WeatherApiService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -47,4 +49,7 @@ object RetrofitClient {
         .client(openMeteoHttpClient)
         .addConverterFactory(json.asConverterFactory(contentType))
         .build()
+
+    val cityApi: CityApiService = ninjasRetrofit.create(CityApiService::class.java)
+    val weatherApi: WeatherApiService = openMeteoRetrofit.create(WeatherApiService::class.java)
 }
