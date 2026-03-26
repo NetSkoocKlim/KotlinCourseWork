@@ -7,6 +7,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import kotlin.math.roundToInt
 
 @Composable
 fun WeatherScreen(viewModel: WeatherViewModel) {
@@ -15,15 +16,14 @@ fun WeatherScreen(viewModel: WeatherViewModel) {
     var isMenuExpanded by remember { mutableStateOf(false) }
     var selectedCity by remember { mutableStateOf(availableCities.first()) }
 
-
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(
-                top=40.dp,
-                start=16.dp,
-                end=16.dp,
-                bottom=40.dp
+                top = 40.dp,
+                start = 16.dp,
+                end = 16.dp,
+                bottom = 40.dp
             ),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -80,7 +80,7 @@ fun WeatherScreen(viewModel: WeatherViewModel) {
         state.weatherData?.let { weather ->
             Text(text = "Город: ${weather.cityName}", style = MaterialTheme.typography.headlineMedium)
             Text(
-                text = "${weather.forecasts.firstOrNull()?.temperature}°C",
+                text = "${weather.currentTemperature.roundToInt()}°C",
                 style = MaterialTheme.typography.displayLarge
             )
         }

@@ -19,6 +19,9 @@ fun CityDto.toCityWeather(weatherDto: WeatherDto): CityWeather {
         cityName = this.name,
         latitude = this.latitude,
         longitude = this.longitude,
+        currentTemperature = weatherDto.currentData?.temperature
+            ?: weatherDto.hourlyData.temperatures.firstOrNull()
+            ?: 0.0,
         forecasts = weatherDto.toHourForecastList()
     )
 }
