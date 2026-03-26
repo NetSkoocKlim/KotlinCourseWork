@@ -17,16 +17,28 @@ class WeatherViewModel(
     private val _uiState = MutableStateFlow(WeatherUiState())
     val uiState: StateFlow<WeatherUiState> = _uiState.asStateFlow()
 
-    fun loadWeather(cityName: String) {
+    fun loadWeather(city: CityOption) {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, errorMessage = null) }
 
-            val result = getWeatherUseCase(cityName)
+            val result = getWeatherUseCase(city.apiName)
 
             result.onSuccess { data ->
-                _uiState.update { it.copy(isLoading = false, weatherData = data) }
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        weatherData = data.copy(cityName = city.russianName),
+                        errorMessage = null
+                    )
+                }
             }.onFailure { error ->
-                _uiState.update { it.copy(isLoading = false, errorMessage = error.message) }
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        weatherData = null,
+                        errorMessage = error.message
+                    )
+                }
             }
         }
     }

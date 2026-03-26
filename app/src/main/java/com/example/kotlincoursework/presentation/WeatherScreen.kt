@@ -11,7 +11,10 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun WeatherScreen(viewModel: WeatherViewModel) {
     val state by viewModel.uiState.collectAsState()
-    var cityInput by remember { mutableStateOf("") }
+    val availableCities = remember { CityCatalog.cities }
+    var isMenuExpanded by remember { mutableStateOf(false) }
+    var selectedCity by remember { mutableStateOf(availableCities.first()) }
+
 
     Column(
         modifier = Modifier
@@ -24,16 +27,42 @@ fun WeatherScreen(viewModel: WeatherViewModel) {
             ),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        TextField(
-            value = cityInput,
-            onValueChange = { cityInput = it },
-            label = { Text("Введите город") },
-            modifier = Modifier.fillMaxWidth()
+        Text(
+            text = "Выберите город",
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 8.dp)
         )
 
+        Box(modifier = Modifier.fillMaxWidth()) {
+            OutlinedButton(
+                onClick = { isMenuExpanded = true },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(selectedCity.russianName)
+            }
+
+            DropdownMenu(
+                expanded = isMenuExpanded,
+                onDismissRequest = { isMenuExpanded = false }
+            ) {
+                availableCities.forEach { city ->
+                    DropdownMenuItem(
+                        text = { Text(city.russianName) },
+                        onClick = {
+                            selectedCity = city
+                            isMenuExpanded = false
+                        }
+                    )
+                }
+            }
+        }
+
         Button(
-            onClick = { viewModel.loadWeather(cityInput) },
-            modifier = Modifier.padding(top = 8.dp)
+            onClick = { viewModel.loadWeather(selectedCity) },
+            modifier = Modifier.padding(top = 8.dp),
+            enabled = !state.isLoading
         ) {
             Text("Узнать погоду")
         }
@@ -50,8 +79,10 @@ fun WeatherScreen(viewModel: WeatherViewModel) {
 
         state.weatherData?.let { weather ->
             Text(text = "Город: ${weather.cityName}", style = MaterialTheme.typography.headlineMedium)
-            val currentTemp = weather.forecasts.firstOrNull()?.temperature ?: 0.0
-            Text(text = "$currentTemp°C", style = MaterialTheme.typography.displayLarge)
+            Text(
+                text = "${weather.forecasts.firstOrNull()?.temperature}°C",
+                style = MaterialTheme.typography.displayLarge
+            )
         }
     }
 }
