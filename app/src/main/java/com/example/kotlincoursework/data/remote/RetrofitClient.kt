@@ -1,5 +1,5 @@
 package com.example.kotlincoursework.data.remote
-
+import com.example.kotlincoursework.BuildConfig
 import com.example.kotlincoursework.data.remote.api.CityApiService
 import com.example.kotlincoursework.data.remote.api.WeatherApiService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
@@ -10,8 +10,6 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 
 object RetrofitClient {
-
-    private const val NINJAS_API_KEY = "2d8EerBA8Q7Hp72VXBaCzVEMxV2IRfQjMi1sIblO"
 
     private val json = Json {
         ignoreUnknownKeys = true
@@ -25,7 +23,7 @@ object RetrofitClient {
     private val ninjasHttpClient = OkHttpClient.Builder()
         .addInterceptor { chain ->
             val request = chain.request().newBuilder()
-                .addHeader("X-Api-Key", NINJAS_API_KEY)
+                .addHeader("X-Api-Key", BuildConfig.WEATHER_API_KEY)
                 .build()
             chain.proceed(request)
         }
