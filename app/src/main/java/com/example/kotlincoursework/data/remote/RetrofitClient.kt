@@ -1,0 +1,53 @@
+package com.example.kotlincoursework.data.remote
+import com.example.kotlincoursework.BuildConfig
+import com.example.kotlincoursework.data.remote.api.CityApiService
+import com.example.kotlincoursework.data.remote.api.WeatherApiService
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import kotlinx.serialization.json.Json
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+
+object RetrofitClient {
+
+    private val json = Json {
+        ignoreUnknownKeys = true
+        coerceInputValues = true
+    }
+
+    private val loggingInterceptor = HttpLoggingInterceptor().apply {
+        level = HttpLoggingInterceptor.Level.BODY
+    }
+
+    private val ninjasHttpClient = OkHttpClient.Builder()
+        .addInterceptor { chain ->
+            val request = chain.request().newBuilder()
+                .addHeader("X-Api-Key", BuildConfig.WEATHER_API_KEY)
+                .build()
+            chain.proceed(request)
+        }
+        .addInterceptor(loggingInterceptor)
+        .build()
+
+    private val openMeteoHttpClient = OkHttpClient.Builder()
+        .addInterceptor(loggingInterceptor)
+        .build()
+
+    private val contentType = "application/json".toMediaType()
+
+    val ninjasRetrofit: Retrofit = Retrofit.Builder()
+        .baseUrl("https://api.api-ninjas.com/v1/")
+        .client(ninjasHttpClient)
+        .addConverterFactory(json.asConverterFactory(contentType))
+        .build()
+
+    val openMeteoRetrofit: Retrofit = Retrofit.Builder()
+        .baseUrl("https://api.open-meteo.com/v1/")
+        .client(openMeteoHttpClient)
+        .addConverterFactory(json.asConverterFactory(contentType))
+        .build()
+
+    val cityApi: CityApiService = ninjasRetrofit.create(CityApiService::class.java)
+    val weatherApi: WeatherApiService = openMeteoRetrofit.create(WeatherApiService::class.java)
+}

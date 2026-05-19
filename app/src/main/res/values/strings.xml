@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">KotlinCourseWork</string>
+    <string name="weather_title">Прогноз погоды</string>
+    <string name="weather_subtitle">Текущая температура и прогноз на ближайшие часы.</string>
+    <string name="weather_city_label">Город</string>
+    <string name="weather_load_button">Узнать погоду</string>
+    <string name="weather_now_section">Сейчас</string>
+    <string name="weather_hourly_section">Почасовой прогноз</string>
+    <string name="weather_loading">Загружаем прогноз…</string>
+    <string name="weather_error_title">Не удалось загрузить данные</string>
+    <string name="weather_retry">Повторить</string>
+    <string name="weather_empty_state">Выберите город, чтобы увидеть текущую температуру и прогноз на ближайшие часы.</string>
+    <string name="weather_city_prompt">Выберите город и загрузите актуальные данные.</string>
+    <string name="weather_coordinates">Координаты: %1$.2f, %2$.2f</string>
+    <string name="weather_temperature_celsius">%1$s°C</string>
+    <string name="weather_forecast_time">%1$s</string>
 </resources>
