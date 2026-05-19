@@ -10,20 +10,15 @@ import androidx.compose.ui.Modifier
 import com.example.kotlincoursework.data.remote.RetrofitClient
 import com.example.kotlincoursework.data.repository.WeatherRepositoryImpl
 import com.example.kotlincoursework.domain.usecase.GetWeatherUseCase
-import com.example.kotlincoursework.presentation.WeatherScreen
-import com.example.kotlincoursework.presentation.WeatherViewModel
+import com.example.kotlincoursework.presentation.weather.WeatherRoute
+import com.example.kotlincoursework.presentation.weather.WeatherViewModel
 import com.example.kotlincoursework.ui.theme.KotlinCourseWorkTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val repository = WeatherRepositoryImpl(
-            cityApi = RetrofitClient.cityApi,
-            weatherApi = RetrofitClient.weatherApi
-        )
-        val getWeatherUseCase = GetWeatherUseCase(repository)
-        val viewModel = WeatherViewModel(getWeatherUseCase)
+        val viewModel = createWeatherViewModel()
 
         setContent {
             KotlinCourseWorkTheme {
@@ -31,9 +26,18 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    WeatherScreen(viewModel = viewModel)
+                    WeatherRoute(viewModel = viewModel)
                 }
             }
         }
+    }
+
+    private fun createWeatherViewModel(): WeatherViewModel {
+        val repository = WeatherRepositoryImpl(
+            cityApi = RetrofitClient.cityApi,
+            weatherApi = RetrofitClient.weatherApi
+        )
+        val getWeatherUseCase = GetWeatherUseCase(repository)
+        return WeatherViewModel(getWeatherUseCase)
     }
 }

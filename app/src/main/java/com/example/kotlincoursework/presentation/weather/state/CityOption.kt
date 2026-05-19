@@ -1,5 +1,4 @@
-package com.example.kotlincoursework.presentation
-
+package com.example.kotlincoursework.presentation.weather.state
 
 data class CityOption(
     val russianName: String,
